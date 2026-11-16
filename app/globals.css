@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+@page { margin: 0.5in; }
+
+@keyframes qs-spin { to { transform: rotate(360deg); } }
+.qs-spin { animation: qs-spin 0.9s linear infinite; }
+
+@keyframes qs-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.qs-pulse { animation: qs-pulse 1s ease-in-out infinite; }
+
+input[type=number]::-webkit-inner-spin-button { opacity: 1; }
+
+@media print {
+  body { background: #fff !important; }
+  .no-print { display: none !important; }
+  #proposal { box-shadow: none !important; border: 0 !important; margin: 0 !important; max-width: none !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tr { break-inside: avoid; }
+}
