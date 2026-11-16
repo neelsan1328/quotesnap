@@ -36,6 +36,9 @@ const ICONS = {
   pen: '<path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/>',
   eraser: '<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/>',
   chevron: '<path d="m6 9 6 6 6-6"/>',
+  dollar: '<line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  circleCheck: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
 };
 const Icon = ({ name, size = 18, className = '' }) => html`<svg xmlns="http://www.w3.org/2000/svg" width=${size} height=${size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className=${className} aria-hidden="true" dangerouslySetInnerHTML=${{ __html: ICONS[name] }}></svg>`;
 
@@ -274,13 +277,13 @@ const fmtDate = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: '
 const fmtShort = (iso) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
 /* ---------- small UI pieces ---------- */
-const inputCls = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-900 placeholder-slate-400 shadow-sm transition focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-200';
-const cellCls = 'w-full rounded-md border border-slate-300 bg-white px-2 py-2 text-sm text-slate-900 transition focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-200';
+const inputCls = 'w-full rounded-xl bg-white px-3.5 py-3 text-base text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-slate-200 transition hover:ring-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500';
+const cellCls = 'w-full rounded-lg bg-white px-2.5 py-2 text-sm text-slate-900 ring-1 ring-slate-200 transition hover:ring-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500';
 const ROWGRID = 'grid grid-cols-[132px_minmax(0,1fr)_88px_76px_112px_112px_36px] items-center gap-2';
 
 const Field = ({ label, hint, children }) => html`
   <label className="block">
-    <span className="mb-1 block text-sm font-bold text-slate-800">${label}</span>
+    <span className="mb-1.5 block text-[13px] font-semibold tracking-wide text-slate-700">${label}</span>
     ${children}
     ${hint && html`<span className="mt-1 block text-xs text-slate-600">${hint}</span>`}
   </label>`;
@@ -294,33 +297,33 @@ const Affix = ({ pre, post, children }) => html`
 
 const Btn = ({ onClick, icon, children, kind = 'primary', disabled, className = '' }) => {
   const kinds = {
-    primary: 'bg-amber-500 text-slate-900 hover:bg-amber-400 border-amber-600',
-    dark: 'bg-slate-900 text-white hover:bg-slate-700 border-slate-900',
-    light: 'bg-white text-slate-900 hover:bg-slate-50 border-slate-300',
-    danger: 'bg-white text-red-700 hover:bg-red-50 border-red-300',
-    dangerSolid: 'bg-red-600 text-white hover:bg-red-500 border-red-700',
+    primary: 'bg-gradient-to-b from-amber-400 to-amber-600 text-slate-950 ring-1 ring-amber-700/40 hover:from-amber-300 hover:to-amber-500',
+    dark: 'bg-slate-900 text-white ring-1 ring-slate-900 hover:bg-slate-800',
+    light: 'bg-white text-slate-900 ring-1 ring-slate-200 hover:bg-slate-50 hover:ring-slate-300',
+    danger: 'bg-white text-red-700 ring-1 ring-red-200 hover:bg-red-50',
+    dangerSolid: 'bg-red-600 text-white ring-1 ring-red-700 hover:bg-red-500',
   };
   return html`<button type="button" onClick=${onClick} disabled=${disabled}
-    className=${`inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-bold shadow-sm transition duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 ${kinds[kind]} ${className}`}>
+    className=${`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold shadow-sm transition duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 ${kinds[kind]} ${className}`}>
     ${icon && html`<${Icon} name=${icon} size=${18} />`}${children}
   </button>`;
 };
 
 const Card = ({ title, subtitle, right, children }) => html`
-  <section className="rounded-2xl border border-slate-200 bg-white shadow-sm ring-1 ring-slate-900/5 transition-shadow duration-200 hover:shadow-md">
+  <section className="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition-shadow duration-200 hover:shadow-md">
     ${(title || right) && html`
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 px-4 py-3.5 sm:px-5">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-t-2xl border-b border-slate-100 bg-slate-50/70 px-4 py-4 sm:px-6">
         <div>
-          <h2 className="text-lg font-extrabold tracking-tight text-slate-900">${title}</h2>
+          <h2 className="text-[17px] font-extrabold tracking-tight text-slate-900">${title}</h2>
           ${subtitle && html`<p className="text-sm text-slate-600">${subtitle}</p>`}
         </div>
         ${right}
       </div>`}
-    <div className="p-4 sm:p-5">${children}</div>
+    <div className="p-4 sm:p-6">${children}</div>
   </section>`;
 
 const Empty = ({ title, text, icon = 'fileText', children }) => html`
-  <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
+  <div className="rounded-2xl bg-white p-10 text-center shadow-sm ring-1 ring-slate-200">
     <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-700"><${Icon} name=${icon} size=${24} /></div>
     <h2 className="text-lg font-extrabold">${title}</h2>
     <p className="mx-auto mt-1 max-w-md text-slate-600">${text}</p>
@@ -344,7 +347,7 @@ const PillSelect = ({ value, onChange, tone, options, label }) => html`
 const ItemRow = ({ it, onChange, onDelete }) => {
   const lt = r2(num(it.qty) * num(it.cost));
   return html`
-    <div className=${`${ROWGRID} border-t border-slate-200 px-3 py-2 transition-colors hover:bg-slate-50`}>
+    <div className=${`${ROWGRID} border-t border-slate-100 px-3 py-2.5 transition-colors odd:bg-white even:bg-slate-50/80 hover:bg-amber-50`}>
       <div><${PillSelect} label="Item type" value=${it.cat} tone=${CAT_TONE[it.cat]} options=${CAT_OPTS} onChange=${(v) => onChange({ cat: v })} /></div>
       <input aria-label="Description" className=${cellCls} value=${it.desc} placeholder="Description" onInput=${(e) => onChange({ desc: e.target.value })} />
       <input aria-label="Quantity" type="number" inputMode="decimal" min="0" step="any" className=${cellCls} value=${it.qty} onInput=${(e) => onChange({ qty: e.target.value })} />
@@ -358,7 +361,7 @@ const ItemRow = ({ it, onChange, onDelete }) => {
 const ItemCard = ({ it, onChange, onDelete }) => {
   const lt = r2(num(it.qty) * num(it.cost));
   return html`
-    <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md">
+    <div className="rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-200 transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between gap-2">
         <${PillSelect} label="Item type" value=${it.cat} tone=${CAT_TONE[it.cat]} options=${CAT_OPTS} onChange=${(v) => onChange({ cat: v })} />
         <div className="flex items-center gap-1">
@@ -451,6 +454,31 @@ const SignaturePad = ({ onApprove }) => {
       </div>
     </div>`;
 };
+
+/* ---------- brand badge and KPI cards ---------- */
+const LogoBadge = () => html`
+  <svg width="42" height="42" viewBox="0 0 42 42" role="img" aria-label="QuoteSnap logo" className="shrink-0 drop-shadow">
+    <defs>
+      <linearGradient id="qsBadge" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#FBBF24" />
+        <stop offset="1" stopColor="#EA580C" />
+      </linearGradient>
+    </defs>
+    <rect width="42" height="42" rx="12" fill="url(#qsBadge)" />
+    <path d="M13 9h11.5l6 6v17a2.5 2.5 0 0 1-2.5 2.5H13A2.5 2.5 0 0 1 10.5 32V11.5A2.5 2.5 0 0 1 13 9z" fill="#0F172A" />
+    <path d="M24.5 9v4.5a1.5 1.5 0 0 0 1.5 1.5h4.5" fill="none" stroke="#475569" strokeWidth="1.5" />
+    <path d="M22.5 17.5l-6 8.2h4.6l-1.6 7 7.4-9.8h-4.8z" fill="#FBBF24" />
+  </svg>`;
+
+const Kpi = ({ icon, label, value, sub, tone }) => html`
+  <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <div className="flex items-center justify-between">
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-500">${label}</span>
+      <span className=${`flex h-9 w-9 items-center justify-center rounded-xl ${tone}`}><${Icon} name=${icon} size=${18} /></span>
+    </div>
+    <div className="mt-3 text-3xl font-extrabold tracking-tight tabular-nums text-slate-900">${value}</div>
+    <div className="mt-0.5 text-sm text-slate-500">${sub}</div>
+  </div>`;
 
 /* ---------- editable payment terms (presets + free text) ---------- */
 const TermsEditor = ({ value, onChange, rows = 5 }) => html`
@@ -715,6 +743,18 @@ export default function App() {
     { key: 'fee', label: 'Disposal, Permits and Fees' },
   ];
 
+  const sumOf = (list) => r2(list.reduce((a, x) => a + num(x.total), 0));
+  const kApproved = quotes.filter((x) => x.status === 'Approved');
+  const kDraft = quotes.filter((x) => x.status === 'Draft');
+  const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+  const initials = (saved.name || 'QS').trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+  const Kpis = html`
+    <div className="grid gap-3 sm:grid-cols-3">
+      <${Kpi} icon="dollar" tone="bg-amber-100 text-amber-700" label="Total Quoted Value" value=${money(sumOf(quotes))} sub=${plural(quotes.length, 'quote') + ' all time'} />
+      <${Kpi} icon="circleCheck" tone="bg-green-100 text-green-700" label="Approved Quotes" value=${kApproved.length} sub=${money(sumOf(kApproved)) + ' won'} />
+      <${Kpi} icon="clock" tone="bg-slate-100 text-slate-700" label="Pending Drafts" value=${kDraft.length} sub=${money(sumOf(kDraft)) + ' waiting to send'} />
+    </div>`;
+
   /* ---------- views ---------- */
   const SettingsView = html`
     <div className="mx-auto max-w-3xl space-y-4">
@@ -751,7 +791,7 @@ export default function App() {
               : html`<span className="flex flex-col items-center text-xs font-bold text-slate-500"><${Icon} name="image" size=${24} />No logo yet</span>`}
           </div>
           <div className="space-y-2">
-            <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-amber-600 bg-amber-500 px-4 py-2.5 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-amber-400 active:scale-[0.98]">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-gradient-to-b from-amber-400 to-amber-600 px-4 py-2.5 text-sm font-bold text-slate-950 shadow-sm ring-1 ring-amber-700/40 transition hover:from-amber-300 hover:to-amber-500 active:scale-[0.98]">
               <${Icon} name="upload" size=${18} />${draft.logo ? 'Replace Logo' : 'Upload Logo'}
               <input type="file" accept="image/*" className="sr-only" onChange=${(e) => { onLogoFile(e.target.files && e.target.files[0]); e.target.value = ''; }} />
             </label>
@@ -803,6 +843,7 @@ export default function App() {
 
   const QuoteView = html`
     <div className="mx-auto max-w-3xl space-y-4">
+      ${Kpis}
       <${Card} title="New Quote" subtitle="Describe the job and QuoteSnap builds the estimate."
         right=${(q.notes || q.customer || currentId) && html`<${Btn} kind="light" icon="rotate" onClick=${newQuote}>Clear Form<//>`}>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -846,7 +887,7 @@ export default function App() {
         ${err && html`<p role="alert" className="mt-3 rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm font-bold text-red-800">${err}</p>`}
         <div className="mt-5">
           <button type="button" onClick=${generate} disabled=${loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-600 bg-amber-500 px-5 py-4 text-lg font-extrabold text-slate-900 shadow-md transition duration-150 hover:bg-amber-400 hover:shadow-lg active:scale-[0.99] disabled:opacity-80 sm:w-auto">
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-amber-400 to-amber-600 px-6 py-4 text-lg font-extrabold text-slate-950 shadow-lg ring-1 ring-amber-700/40 transition duration-150 hover:from-amber-300 hover:to-amber-500 hover:shadow-xl active:scale-[0.99] disabled:opacity-80 sm:w-auto">
             ${loading ? html`<${Icon} name="loader" size=${22} className="qs-spin" />` : html`<${Icon} name="sparkles" size=${22} />`}
             ${loading ? 'Generating...' : 'Generate Smart Estimate'}
           </button>
@@ -873,7 +914,7 @@ export default function App() {
             <${Btn} kind="light" icon="plus" onClick=${() => addItem('fee')}>Fee<//>
           </div>
 
-          <div className="hidden overflow-hidden rounded-xl border border-slate-200 md:block">
+          <div className="hidden overflow-hidden rounded-xl shadow-sm ring-1 ring-slate-200 md:block">
             <div className=${`${ROWGRID} bg-slate-900 px-3 py-2.5 text-xs font-bold uppercase tracking-wide text-white`}>
               <span>Type</span><span>Description</span><span>Qty</span><span>Unit</span><span>Unit cost</span><span className="text-right">Line total</span><span></span>
             </div>
@@ -902,7 +943,7 @@ export default function App() {
               <div className="flex justify-between"><dt className="text-slate-700">Sales tax (${num(tax)}% on ${money(t.taxable)})</dt><dd className="font-bold tabular-nums">${money(t.tax)}</dd></div>
             </dl>
             <p className="mt-2 text-xs text-slate-500">Texas sales tax is charged on materials plus markup. Labor and fees are not taxed.</p>
-            <div className="mt-4 flex items-center justify-between rounded-xl bg-slate-900 px-4 py-3 text-white shadow-md">
+            <div className="mt-4 flex items-center justify-between rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 px-4 py-4 text-white shadow-lg">
               <span className="text-sm font-bold uppercase tracking-wide text-slate-300">Grand Total</span>
               <span className="text-3xl font-extrabold tabular-nums text-amber-400">${money(t.total)}</span>
             </div>
@@ -938,95 +979,104 @@ export default function App() {
         <//>
       </div>
 
-      <article id="proposal" className="overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-slate-900/10 print:rounded-none print:shadow-none print:ring-0" style=${{ color: '#0f172a' }}>
-        <div style=${{ background: brand.main, height: 14 }}></div>
-        <div className="p-6 sm:p-10">
-          <header className="flex flex-wrap items-start justify-between gap-4 pb-5" style=${{ borderBottom: `4px solid ${brand.main}` }}>
+      <article id="proposal" className="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-slate-900/10 print:rounded-none print:shadow-none print:ring-0" style=${{ color: '#0f172a' }}>
+        <header className="px-6 py-8 sm:px-10" style=${{ background: brand.main, color: brand.on }}>
+          <div className="flex flex-wrap items-center justify-between gap-5">
             <div className="flex items-center gap-4">
-              ${saved.logo && html`<img src=${saved.logo} alt="Company logo" className="max-h-20 max-w-[180px] object-contain" />`}
+              ${saved.logo && html`<div className="rounded-xl bg-white p-2 shadow"><img src=${saved.logo} alt="Company logo" className="max-h-16 max-w-[160px] object-contain" /></div>`}
               <div>
-                <h1 className="text-2xl font-extrabold">${saved.name || 'Your Company'}</h1>
-                <p className="mt-1 text-sm text-slate-700">${saved.phone}${saved.phone && saved.email ? '  |  ' : ''}${saved.email}</p>
+                <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">${saved.name || 'Your Company'}</h1>
+                <p className="mt-1 text-sm opacity-90">${saved.phone}${saved.phone && saved.email ? '  |  ' : ''}${saved.email}</p>
               </div>
             </div>
             <div className="ml-auto text-right">
-              <div className="inline-block px-3 py-1 text-sm font-extrabold uppercase tracking-widest" style=${{ background: brand.main, color: brand.on }}>Proposal</div>
-              <p className="mt-2 text-sm"><span className="font-bold">No.</span> QS-${qNo}</p>
-              <p className="text-sm"><span className="font-bold">Date:</span> ${fmtDate(qd)}</p>
-              <p className="text-sm"><span className="font-bold">Valid through:</span> ${fmtDate(validThru)}</p>
+              <div className="text-[11px] font-bold uppercase tracking-[0.3em] opacity-80">Contract Proposal</div>
+              <div className="mt-1 text-3xl font-extrabold tabular-nums">QS-${qNo}</div>
             </div>
-          </header>
+          </div>
+        </header>
+        <div className="grid grid-cols-3 text-sm" style=${{ background: brand.soft, borderBottom: `3px solid ${brand.main}` }}>
+          <div className="px-4 py-3 sm:pl-10"><div className="text-[11px] font-bold uppercase tracking-widest opacity-70">Issued</div><div className="font-bold">${fmtDate(qd)}</div></div>
+          <div className="px-4 py-3"><div className="text-[11px] font-bold uppercase tracking-widest opacity-70">Valid through</div><div className="font-bold">${fmtDate(validThru)}</div></div>
+          <div className="px-4 py-3"><div className="text-[11px] font-bold uppercase tracking-widest opacity-70">Project</div><div className="font-bold">${q.jobType}</div></div>
+        </div>
 
-          <section className="mt-5 grid gap-5 sm:grid-cols-2">
-            <div>
+        <div className="space-y-7 p-6 sm:p-10">
+          <section className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200" style=${{ borderLeft: `5px solid ${brand.main}` }}>
               <h2 className="text-xs font-extrabold uppercase tracking-widest" style=${{ color: brand.text }}>Prepared for</h2>
               <p className="mt-1 text-lg font-bold">${q.customer || 'Valued Customer'}</p>
               <p className="text-sm text-slate-700">${q.address || 'Address on file'}</p>
             </div>
-            <div>
-              <h2 className="text-xs font-extrabold uppercase tracking-widest" style=${{ color: brand.text }}>Project</h2>
-              <p className="mt-1 text-lg font-bold">${q.jobType}</p>
+            <div className="rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200" style=${{ borderLeft: `5px solid ${brand.main}` }}>
+              <h2 className="text-xs font-extrabold uppercase tracking-widest" style=${{ color: brand.text }}>Prepared by</h2>
+              <p className="mt-1 text-lg font-bold">${saved.name || 'Your Company'}</p>
+              <p className="text-sm text-slate-700">${saved.phone}${saved.phone && saved.email ? '  |  ' : ''}${saved.email}</p>
             </div>
           </section>
 
           ${q.notes.trim() && html`
-            <section className="mt-5">
+            <section>
               <h2 className="text-xs font-extrabold uppercase tracking-widest" style=${{ color: brand.text }}>Scope of Work</h2>
               <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-slate-800">${q.notes}</p>
             </section>`}
 
-          <table className="mt-6 w-full text-sm">
-            <thead>
-              <tr className="text-left text-xs uppercase tracking-wide" style=${{ background: brand.main, color: brand.on }}>
-                <th className="px-3 py-2">Description</th>
-                <th className="px-3 py-2 text-right">Qty</th>
-                <th className="px-3 py-2">Unit</th>
-                <th className="px-3 py-2 text-right">Unit Price</th>
-                <th className="px-3 py-2 text-right">Amount</th>
-              </tr>
-            </thead>
-            ${groups.map((g) => {
-              const rows = items.filter((it) => it.cat === g.key);
-              if (!rows.length) return null;
-              return html`
-                <tbody key=${g.key}>
-                  <tr><td colSpan="5" className="px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider" style=${{ background: brand.soft }}>${g.label}</td></tr>
-                  ${rows.map((it) => {
-                    const lt = r2(num(it.qty) * num(it.cost));
-                    const amt = g.key === 'material' ? r2(lt + r2(lt * mNum / 100)) : lt;
-                    const unitP = g.key === 'material' ? r2(num(it.cost) * (1 + mNum / 100)) : num(it.cost);
-                    return html`
-                      <tr key=${it.id} style=${{ borderBottom: '1px solid #cbd5e1' }}>
-                        <td className="px-3 py-2">${it.desc || '(no description)'}</td>
-                        <td className="px-3 py-2 text-right tabular-nums">${num(it.qty)}</td>
-                        <td className="px-3 py-2">${it.unit}</td>
-                        <td className="px-3 py-2 text-right tabular-nums">${money(unitP)}</td>
-                        <td className="px-3 py-2 text-right font-bold tabular-nums">${money(amt)}</td>
-                      </tr>`;
-                  })}
-                </tbody>`;
-            })}
-          </table>
-
-          <div className="ml-auto mt-4 w-full max-w-xs space-y-1 text-sm">
-            <div className="flex justify-between"><span>Subtotal</span><span className="font-bold tabular-nums">${money(t.subtotal + t.markup)}</span></div>
-            <div className="flex justify-between"><span>Sales tax (${num(tax)}%)</span><span className="font-bold tabular-nums">${money(t.tax)}</span></div>
-            <div className="flex items-center justify-between px-3 py-2" style=${{ background: brand.main, color: brand.on }}>
-              <span className="font-extrabold uppercase tracking-wide">Total</span>
-              <span className="text-xl font-extrabold tabular-nums">${money(t.total)}</span>
-            </div>
-
+          <div className="overflow-hidden rounded-xl ring-1 ring-slate-200">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs uppercase tracking-wide" style=${{ background: brand.main, color: brand.on }}>
+                  <th className="px-3 py-2.5">Description</th>
+                  <th className="px-3 py-2.5 text-right">Qty</th>
+                  <th className="px-3 py-2.5">Unit</th>
+                  <th className="px-3 py-2.5 text-right">Unit Price</th>
+                  <th className="px-3 py-2.5 text-right">Amount</th>
+                </tr>
+              </thead>
+              ${groups.map((g) => {
+                const rows = items.filter((it) => it.cat === g.key);
+                if (!rows.length) return null;
+                return html`
+                  <tbody key=${g.key}>
+                    <tr><td colSpan="5" className="px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider" style=${{ background: brand.soft, color: brand.text }}>${g.label}</td></tr>
+                    ${rows.map((it, ri) => {
+                      const lt = r2(num(it.qty) * num(it.cost));
+                      const amt = g.key === 'material' ? r2(lt + r2(lt * mNum / 100)) : lt;
+                      const unitP = g.key === 'material' ? r2(num(it.cost) * (1 + mNum / 100)) : num(it.cost);
+                      return html`
+                        <tr key=${it.id} style=${{ background: ri % 2 ? '#f1f5f9' : '#ffffff' }}>
+                          <td className="px-3 py-2.5">${it.desc || '(no description)'}</td>
+                          <td className="px-3 py-2.5 text-right tabular-nums">${num(it.qty)}</td>
+                          <td className="px-3 py-2.5">${it.unit}</td>
+                          <td className="px-3 py-2.5 text-right tabular-nums">${money(unitP)}</td>
+                          <td className="px-3 py-2.5 text-right font-bold tabular-nums">${money(amt)}</td>
+                        </tr>`;
+                    })}
+                  </tbody>`;
+              })}
+            </table>
           </div>
 
-          <section className="mt-8 pt-4" style=${{ borderTop: `2px solid ${brand.main}` }}>
+          <div className="ml-auto w-full max-w-xs overflow-hidden rounded-xl text-sm ring-1 ring-slate-200">
+            <div className="flex justify-between px-4 py-2.5"><span>Subtotal</span><span className="font-bold tabular-nums">${money(t.subtotal + t.markup)}</span></div>
+            <div className="flex justify-between bg-slate-50 px-4 py-2.5"><span>Sales tax (${num(tax)}%)</span><span className="font-bold tabular-nums">${money(t.tax)}</span></div>
+            <div className="flex items-center justify-between px-4 py-3.5" style=${{ background: brand.main, color: brand.on }}>
+              <span className="font-extrabold uppercase tracking-wide">Total</span>
+              <span className="text-2xl font-extrabold tabular-nums">${money(t.total)}</span>
+            </div>
+          </div>
+
+          <section className="rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200" style=${{ borderLeft: `5px solid ${brand.main}` }}>
             <h2 className="text-xs font-extrabold uppercase tracking-widest" style=${{ color: brand.text }}>Payment Terms</h2>
             <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-slate-800">${terms.trim() || 'Payment terms to be agreed.'}</p>
           </section>
 
-          <section className="mt-8">
-            <h2 className="text-xs font-extrabold uppercase tracking-widest" style=${{ color: brand.text }}>Customer Approval</h2>
-            <p className="mt-1 text-sm text-slate-800">By signing below, you accept this proposal and authorize ${saved.name || 'the contractor'} to begin work.</p>
-            <div className="mt-5 grid gap-8 sm:grid-cols-2">
+          <section className="overflow-hidden rounded-2xl bg-white" style=${{ border: `2px solid ${brand.main}` }}>
+            <div className="px-5 py-3" style=${{ background: brand.main, color: brand.on }}>
+              <h2 className="text-sm font-extrabold uppercase tracking-widest">Client Authorization & Signature</h2>
+            </div>
+            <div className="p-5">
+              <p className="text-sm text-slate-800">By signing below, you accept this proposal and authorize ${saved.name || 'the contractor'} to begin work.</p>
+              <div className="mt-5 grid gap-8 sm:grid-cols-2">
               <div>
                 ${signature
                   ? html`
@@ -1058,8 +1108,9 @@ export default function App() {
                 <p className="mt-1 text-xs font-bold uppercase tracking-wide">Date</p>
               </div>
             </div>
+            </div>
           </section>
-          <p className="mt-8 text-center text-xs text-slate-500">Thank you for your business.</p>
+          <p className="text-center text-xs text-slate-500">Thank you for your business.</p>
         </div>
       </article>
     </div>`;
@@ -1068,8 +1119,6 @@ export default function App() {
   const counts = { All: quotes.length };
   STATUSES.forEach((s) => { counts[s] = quotes.filter((x) => x.status === s).length; });
   const shown = filter === 'All' ? quotes : quotes.filter((x) => x.status === filter);
-  const approvedValue = r2(quotes.filter((x) => x.status === 'Approved').reduce((a, x) => a + num(x.total), 0));
-  const pipelineValue = r2(quotes.filter((x) => x.status !== 'Approved').reduce((a, x) => a + num(x.total), 0));
 
   const HistoryView = quotes.length === 0 ? html`
     <div className="mx-auto max-w-3xl">
@@ -1078,11 +1127,7 @@ export default function App() {
       <//>
     </div>` : html`
     <div className="mx-auto max-w-4xl space-y-4">
-      <div className="grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-900/5"><div className="text-xs font-bold uppercase tracking-wide text-slate-500">Saved quotes</div><div className="mt-1 text-2xl font-extrabold tabular-nums">${quotes.length}</div></div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-900/5"><div className="text-xs font-bold uppercase tracking-wide text-slate-500">Open pipeline</div><div className="mt-1 text-2xl font-extrabold tabular-nums">${money(pipelineValue)}</div></div>
-        <div className="rounded-2xl border border-green-200 bg-green-50 p-4 shadow-sm"><div className="text-xs font-bold uppercase tracking-wide text-green-800">Approved</div><div className="mt-1 text-2xl font-extrabold tabular-nums text-green-800">${money(approvedValue)}</div></div>
-      </div>
+      ${Kpis}
 
       <div className="flex flex-wrap gap-2">
         ${['All', ...STATUSES].map((f) => html`
@@ -1094,7 +1139,7 @@ export default function App() {
 
       <div className="space-y-3">
         ${shown.map((x) => html`
-          <article key=${x.id} className=${`rounded-2xl border bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${x.id === currentId ? 'border-amber-400 ring-2 ring-amber-200' : 'border-slate-200'}`}>
+          <article key=${x.id} className=${`rounded-2xl bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${x.id === currentId ? 'ring-2 ring-amber-400' : 'ring-1 ring-slate-200'}`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
@@ -1128,27 +1173,32 @@ export default function App() {
   return html`
     <div className="min-h-screen">
       <style dangerouslySetInnerHTML=${{ __html: EXTRA_CSS }} />
-      <header className="no-print z-30 bg-slate-900 text-white shadow-lg md:sticky md:top-0">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+      <header className="no-print z-30 text-white shadow-lg md:sticky md:top-0" style=${{ background: '#0F172A' }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-slate-900 shadow"><${Icon} name="hammer" size=${24} /></div>
+            <${LogoBadge} />
             <div>
               <div className="text-xl font-extrabold leading-tight tracking-tight">Quote<span className="text-amber-400">Snap</span></div>
-              <div className="text-xs text-slate-300">Smart estimates for local trades</div>
+              <div className="text-xs text-slate-400">Estimates and proposals for the trades</div>
             </div>
           </div>
-          <div className="hidden text-right text-sm sm:block">
-            <div className="font-bold">${saved.name}</div>
-            <div className="text-slate-300">${money(saved.rate)}/hr · ${saved.markup}% markup · ${saved.tax}% tax</div>
+          <div className="flex items-center gap-3 rounded-full bg-white/5 py-1.5 pl-1.5 pr-4 ring-1 ring-white/10">
+            ${saved.logo
+              ? html`<span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-white"><img src=${saved.logo} alt="" className="max-h-7 max-w-[28px] object-contain" /></span>`
+              : html`<span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-sm font-extrabold text-slate-900">${initials}</span>`}
+            <div className="hidden leading-tight sm:block">
+              <div className="text-sm font-bold">${saved.name}</div>
+              <div className="text-xs text-slate-400">${money(saved.rate)}/hr · ${saved.markup}% markup · ${saved.tax}% tax</div>
+            </div>
           </div>
         </div>
-        <nav className="border-t border-slate-700 bg-slate-800" aria-label="Main">
-          <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2 py-1.5">
+        <nav className="border-t border-white/10" aria-label="Main">
+          <div className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-3 py-2.5">
             ${TABS.map((tb) => html`
               <button key=${tb.id} type="button" onClick=${() => setView(tb.id)} aria-current=${view === tb.id ? 'page' : undefined}
-                className=${`flex shrink-0 items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-bold transition duration-150 ${view === tb.id ? 'bg-amber-500 text-slate-900 shadow' : 'text-slate-200 hover:bg-white/10'}`}>
-                <${Icon} name=${tb.icon} size=${18} />${tb.label}
-                ${tb.id === 'history' && quotes.length > 0 && html`<span className=${`rounded-full px-1.5 text-xs font-extrabold ${view === tb.id ? 'bg-slate-900 text-amber-400' : 'bg-amber-500 text-slate-900'}`}>${quotes.length}</span>`}
+                className=${`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition duration-150 ${view === tb.id ? 'bg-gradient-to-b from-amber-400 to-amber-600 text-slate-950 shadow-md' : 'text-slate-300 ring-1 ring-white/10 hover:bg-white/10 hover:text-white'}`}>
+                <${Icon} name=${tb.icon} size=${17} />${tb.label}
+                ${tb.id === 'history' && quotes.length > 0 && html`<span className=${`rounded-full px-2 py-0.5 text-xs font-extrabold ${view === tb.id ? 'bg-slate-900 text-amber-400' : 'bg-amber-500 text-slate-900'}`}>${quotes.length}</span>`}
               </button>`)}
           </div>
         </nav>
@@ -1166,7 +1216,7 @@ export default function App() {
             <div className="text-2xl font-extrabold tabular-nums text-amber-400">${money(t.total)}</div>
           </div>
           <button type="button" onClick=${() => setView('proposal')}
-            className="inline-flex items-center gap-2 rounded-lg border border-amber-600 bg-amber-500 px-4 py-2.5 text-sm font-extrabold text-slate-900 shadow transition active:scale-[0.98]">
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-amber-400 to-amber-600 px-4 py-2.5 text-sm font-extrabold text-slate-950 shadow ring-1 ring-amber-700/40 transition active:scale-[0.98]">
             <${Icon} name="fileText" size=${18} />Proposal
           </button>
         </div>`}
